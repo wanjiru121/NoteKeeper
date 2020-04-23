@@ -30,8 +30,16 @@ class MainActivity : AppCompatActivity() {
 
         if (notePosition != POSITION_NOT_SET)
             displayNote()
+        else{
+            DataManager.notes.add(NoteInfo())
+            notePosition = DataManager.notes.lastIndex
+        }
 
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
     }
 
     private fun displayNote() {
@@ -80,6 +88,16 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onPause() {
+        super.onPause()
+        saveNote()
 
+    }
 
+    private fun saveNote() {
+        val note = DataManager.notes[notePosition]
+        note.title = textNoteTitle.text.toString()
+        note.text = textNoteText.text.toString()
+        note.courseInfo = spinnerCourses.selectedItem as CourseInfo
+    }
 }
